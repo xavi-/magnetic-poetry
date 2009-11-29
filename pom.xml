@@ -8,7 +8,7 @@
   <name>magnetic</name>
   <inceptionYear>2007</inceptionYear>
   <properties>
-    <scala.version>2.7.3</scala.version>
+    <scala.version>2.7.5</scala.version>
   </properties>
 
   <repositories>
@@ -16,6 +16,17 @@
       <id>scala-tools.org</id>
       <name>Scala-Tools Maven2 Repository</name>
       <url>http://scala-tools.org/repo-releases</url>
+    </repository>
+    <repository>
+      <id>scala-tools.org.snapshots</id>
+      <name>Scala-Tools Maven2 Repository for Snapshots</name>
+      <url>http://scala-tools.org/repo-snapshots</url>
+      <snapshots/>
+    </repository>
+    <repository>
+      <id>codehausSnapshots</id>
+      <name>Codehaus Snapshots</name>
+      <url>http://snapshots.maven.codehaus.org/maven2</url>
     </repository>
   </repositories>
 
@@ -35,18 +46,13 @@
     </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
-      <artifactId>lift-util</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>net.liftweb</groupId>
       <artifactId>lift-webkit</artifactId>
-      <version>1.0</version>
+      <version>1.1-M5</version>
     </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-mapper</artifactId>
-      <version>1.0</version>
+      <version>1.1-M5</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
