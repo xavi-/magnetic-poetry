@@ -24,8 +24,10 @@ object ShapeTracker extends Actor {
                            "Business", "Administrator", "Administration", "Marketing", "Relations", "Performance",
                            "Strategy", "Synergy", "Professional", "Liaison", "Consultant", "Specialist", "Operations",
                            "Engineer", "Evangelist", "and", "and", "Security", "Creative")
-  private val rand = new java.util.Random
-  private var shapes = Map((0 until words.length).map(x => ("word"+x, (rand.nextInt(430), rand.nextInt(480), words(x)))):_*)
+  private var shapes = {
+    val rand = new java.util.Random
+    Map((0 until words.length).map(x => ("word"+x, (rand.nextInt(430), rand.nextInt(480), words(x)))):_*)
+  }
   private var listeners: List[Actor] = Nil
 
   this.start
