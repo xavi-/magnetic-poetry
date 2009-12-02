@@ -28,8 +28,9 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"/>
 </head>
 <div id="shape-container">
+    <lift:MagneticPoetryUI />
 </div>
-<lift:comet type="MagneticPoetryDisplay"/>
+<lift:comet type="MagneticPoetryDisplay" />
 <script type="text/javascript">
 //<![CDATA[
     var sendUpdate = (function() {
@@ -98,23 +99,13 @@
         };
     })();
     
-    var receivePlacements = function receivePlacements(shapes) {
-        for(shape in shapes) {
-            if($("#" + shape).length == 0) { 
-                $("<div id='" + shape + "'/>")
-                    .text(shapes[shape].word)
-                    .appendTo("#shape-container")
-                    .draggable({ containment: "#shape-container",
-                                 start: function(e) { animator.cancel(this.id); },
-                                 drag: function(e, ui) { sendUpdate(this.id, ui.position.left, ui.position.top); },
-                                 stop: function(e, ui) { sendUpdate(this.id, ui.position.left, ui.position.top, true); } });
-            }
-            
-            $("#" + shape).css({ left: shapes[shape].x, top: shapes[shape].y });
-        }
-    };
-    
-    $(document).ready(getPlacements);
+    $(function() {
+        $("#shape-container div")
+            .draggable({ containment: "#shape-container",
+                         start: function(e) { animator.cancel(this.id); },
+                         drag: function(e, ui) { sendUpdate(this.id, ui.position.left, ui.position.top); },
+                         stop: function(e, ui) { sendUpdate(this.id, ui.position.left, ui.position.top, true); } });
+    });
 //]]>
 </script>
 <script type="text/javascript"><!--
