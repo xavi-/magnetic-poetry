@@ -1,6 +1,5 @@
 <lift:surround with="default" at="content">
 <head>
-    <title>Magnetic Poetry</title>
     <style>
     /*<![CDATA[*/    
     #shape-container
@@ -67,7 +66,7 @@
             arguments.callee.isRunning = false;
             
             for(name in queues) {
-                if(!queues[name] || queues[name].length == 0) { continue; }
+                if(!queues[name] || queues[name].length === 0) { continue; }
                 arguments.callee.isRunning = true;
                 
                 var nextPos = queues[name].shift();
