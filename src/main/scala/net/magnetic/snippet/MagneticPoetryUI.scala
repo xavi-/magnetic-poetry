@@ -14,9 +14,13 @@ import net.magnetic.comet._
 
 class MagneticPoetryUI {
 
-  def renderWord(tup: (String, (Int, Int, String))): NodeSeq = {
-    <div id={ tup._1 } style={ "left: %dpx; top: %dpx;".format(tup._2._1, tup._2._2) }>{ tup._2._3 }</div>
+  def renderWord(ns: NodeSeq, tup: (String, (Int, Int, String))): NodeSeq = {
+    bind("tile", ns,
+      AttrBindParam("id", Text(tup._1), "id"),
+      AttrBindParam("pos", Text("left: %dpx; top: %dpx;".format(tup._2._1, tup._2._2)), "style"),
+      "word" -> tup._2._3
+    )
   }
 
-  def render(xml: NodeSeq): NodeSeq = ShapeTracker.shapes.flatMap(renderWord).toSeq
+  def render(ns: NodeSeq): NodeSeq = ShapeTracker.shapes.flatMap(renderWord(ns, _)).toSeq
 }
