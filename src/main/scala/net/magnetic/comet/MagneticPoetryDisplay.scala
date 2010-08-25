@@ -10,11 +10,11 @@ import JE._
 import scala.actors._
 import scala.actors.Actor._
 
-case class MoveShapes(senderId: String, moves: Map[String, List[List[Number]]])
+case class MoveTiles(senderId: String, moves: Map[String, List[List[Number]]])
 case class AddListener(listener: Actor)
 case class RemoveListener(listener: Actor)
 
-object ShapeTracker extends Actor {
+object TileTracker extends Actor {
   val words = List("Senior", "Chief", "Vice", "Lead", "Director", "Manager", "Principle", "Executive",
                     "Officer", "Official", "Secretary", "Treasurer", "Agent", "Foreman", "President",
                     "Chairman", "Visionary", "Supervisor", "Superintendent", "Head", "General", "Partner",
@@ -22,7 +22,7 @@ object ShapeTracker extends Actor {
                     "Business", "Administrator", "Administration", "Marketing", "Relations", "Performance",
                     "Strategy", "Synergy", "Professional", "Liaison", "Consultant", "Specialist", "Operations",
                     "Engineer", "Evangelist", "and", "and", "Security", "Creative")
-  var shapes = {
+  var tiles = {
     val rand = new java.util.Random
     Map((0 until words.length).map(x => ("word"+x, (rand.nextInt(430), rand.nextInt(480), words(x)))):_*)
   }
@@ -32,11 +32,11 @@ object ShapeTracker extends Actor {
 
   def act = loop {
     react {
-      case MoveShapes(senderId, moves) =>
+      case MoveTiles(senderId, moves) =>
         for((name, posList) <- moves) {
-          shapes += name -> (posList.last(0).intValue, posList.last(1).intValue, shapes(name)._3)
+          tiles += name -> (posList.last(0).intValue, posList.last(1).intValue, tiles(name)._3)
         }
-        listeners.foreach(_ ! MoveShapes(senderId, moves))
+        listeners.foreach(_ ! MoveTiles(senderId, moves))
       case AddListener(listener) =>
         listeners ::= listener
       case RemoveListener(listener) =>
@@ -48,17 +48,17 @@ object ShapeTracker extends Actor {
 
 class MagneticPoetryDisplay extends CometActor {
   override def localSetup() {
-    ShapeTracker ! AddListener(this)
+    TileTracker ! AddListener(this)
   }
 
   override def localShutdown() {
-    ShapeTracker ! RemoveListener(this)
+    TileTracker ! RemoveListener(this)
   }
 
-  override def render = Script(Function("moveShape", List("points"), this.jsonCall("move", JsRaw("points"))))
+  override def render = Script(Function("moveTile", List("points"), this.jsonCall("move", JsRaw("points"))))
   
   override def highPriority() = {
-    case MoveShapes(senderId, moves) if(senderId != this.uniqueId) =>
+    case MoveTiles(senderId, moves) if(senderId != this.uniqueId) =>
       val jsMoves = JsObj(moves.toSeq.map(x =>
               (x._1, JsArray(x._2.map(pos
                       => JsObj("x" -> pos(0).intValue, "y" -> pos(1).intValue, "time" -> pos(2).longValue)):_*))):_*)
@@ -67,7 +67,7 @@ class MagneticPoetryDisplay extends CometActor {
 
   override def handleJson(in: Any): JsCmd = in match {
     case JsonCmd("move", _, moves: Map[String, List[List[Number]]], _) =>
-      ShapeTracker ! MoveShapes(this.uniqueId, moves)
+      TileTracker ! MoveTiles(this.uniqueId, moves)
       Noop
     case j => println("poo: " + j); Noop
   }

@@ -14,7 +14,7 @@ import net.magnetic.comet._
 
 class MagneticPoetryUI {
 
-  def renderWord(ns: NodeSeq, tup: (String, (Int, Int, String))): NodeSeq = {
+  def renderTile(ns: NodeSeq, tup: (String, (Int, Int, String))): NodeSeq = {
     bind("tile", ns,
       AttrBindParam("id", Text(tup._1), "id"),
       AttrBindParam("pos", Text("left: %dpx; top: %dpx;".format(tup._2._1, tup._2._2)), "style"),
@@ -22,5 +22,5 @@ class MagneticPoetryUI {
     )
   }
 
-  def render(ns: NodeSeq): NodeSeq = ShapeTracker.shapes.flatMap(renderWord(ns, _)).toSeq
+  def render(ns: NodeSeq): NodeSeq = TileTracker.tiles.flatMap(renderTile(ns, _)).toSeq
 }

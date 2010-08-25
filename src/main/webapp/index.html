@@ -2,7 +2,7 @@
 <head>
     <style>
     /*<![CDATA[*/    
-    #shape-container
+    #tile-container
     {
         position: relative;
         width: 500px;
@@ -10,7 +10,7 @@
         border: 1px solid black;
     }
     
-    #shape-container div
+    .tile
     {
         position: absolute;
         background: white;
@@ -26,9 +26,9 @@
     <script type="text/javascript" src="/classpath/json.js" id="json"/>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"/>
 </head>
-<div id="shape-container">
+<div id="tile-container">
     <lift:MagneticPoetryUI>
-        <div tile:id="" tile:pos=""><tile:word /></div>
+        <div tile:id="" class="tile" tile:pos=""><tile:word /></div>
     </lift:MagneticPoetryUI>
 </div>
 <lift:comet type="MagneticPoetryDisplay" />
@@ -55,7 +55,7 @@
             if(!forced && curTime - lastSent < 300) { return; }
             
             lastSent = curTime;
-            moveShape(message);
+            moveTile(message);
             message = { };
         };
     })();
@@ -85,16 +85,16 @@
             animator();
         };
         
-        return function receiveUpdate(shapeUpdates) {
-            if(!shapeUpdates) { return; }
+        return function receiveUpdate(tileUpdates) {
+            if(!tileUpdates) { return; }
             
-            for(name in shapeUpdates) {
-                var points = shapeUpdates[name];
+            for(name in tileUpdates) {
+                var pnts = tileUpdates[name];
                 if(!queues[name]) { queues[name] = []; }
                 
-                queues[name].push({ 'x': points[0].x, 'y': points[0].y, 'time': 50 });
-                for(var i = 1; i < points.length; i++) {
-                    queues[name].push({ 'x': points[i].x, 'y': points[i].y, 'delay': points[i].time - points[i - 1].time });
+                queues[name].push({ 'x': pnts[0].x, 'y': pnts[0].y, 'time': 50 });
+                for(var i = 1; i < pnts.length; i++) {
+                    queues[name].push({ 'x': pnts[i].x, 'y': pnts[i].y, 'delay': pnts[i].time - pnts[i - 1].time });
                 }
             }
             if(!animator.isRunning) { animator(); }
@@ -102,8 +102,8 @@
     })();
     
     $(function() {
-        $("#shape-container div")
-            .draggable({ containment: "#shape-container",
+        $(".tile")
+            .draggable({ containment: "#tile-container",
                          start: function(e) { animator.cancel(this.id); },
                          drag: function(e, ui) { sendUpdate(this.id, ui.position.left, ui.position.top); },
                          stop: function(e, ui) { sendUpdate(this.id, ui.position.left, ui.position.top, true); } });
