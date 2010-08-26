@@ -14,6 +14,8 @@ case class MoveTiles(senderId: String, moves: Map[String, List[List[Number]]])
 case class AddListener(listener: Actor)
 case class RemoveListener(listener: Actor)
 
+class Tile(var x: Int, var y: Int, var word: String)
+
 object TileTracker extends Actor {
   val words = List("Senior", "Chief", "Vice", "Lead", "Director", "Manager", "Principle", "Executive",
                     "Officer", "Official", "Secretary", "Treasurer", "Agent", "Foreman", "President",
@@ -24,7 +26,7 @@ object TileTracker extends Actor {
                     "Engineer", "Evangelist", "and", "and", "Security", "Creative")
   var tiles = {
     val rand = new java.util.Random
-    Map((0 until words.length).map(x => ("word"+x, (rand.nextInt(430), rand.nextInt(480), words(x)))):_*)
+    Map((0 until words.length).map { x => "word"+x -> new Tile(rand.nextInt(430), rand.nextInt(480), words(x)) }:_*)
   }
   private var listeners: List[Actor] = Nil
 
@@ -33,8 +35,8 @@ object TileTracker extends Actor {
   def act = loop {
     react {
       case MoveTiles(senderId, moves) =>
-        for((name, posList) <- moves) {
-          tiles += name -> (posList.last(0).intValue, posList.last(1).intValue, tiles(name)._3)
+        for((id, posList) <- moves) {
+          tiles += id -> new Tile(posList.last(0).intValue, posList.last(1).intValue, tiles(id).word)
         }
         listeners.foreach(_ ! MoveTiles(senderId, moves))
       case AddListener(listener) =>
