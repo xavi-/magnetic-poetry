@@ -11,8 +11,8 @@ import scala.actors._
 import scala.actors.Actor._
 
 case class MoveTiles(senderId: String, moves: Map[String, List[List[Number]]])
-case class AddListener(listener: Actor)
-case class RemoveListener(listener: Actor)
+case class AddListener(listener: CometActor)
+case class RemoveListener(listener: CometActor)
 
 class Tile(var x: Int, var y: Int, var word: String)
 
@@ -28,7 +28,7 @@ object TileTracker extends Actor {
     val rand = new java.util.Random
     Map((0 until words.length).map { x => "word"+x -> new Tile(rand.nextInt(430), rand.nextInt(480), words(x)) }:_*)
   }
-  private var listeners: List[Actor] = Nil
+  private var listeners: List[CometActor] = Nil
 
   this.start
 
