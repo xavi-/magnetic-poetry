@@ -48,7 +48,7 @@ object TileTracker extends Actor {
   }
 }
 
-class MagneticPoetryDisplay extends CometActor {
+class PoetryCometActor extends CometActor {
   override def localSetup() {
     TileTracker ! AddListener(this)
   }

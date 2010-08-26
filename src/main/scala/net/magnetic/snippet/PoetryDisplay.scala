@@ -12,7 +12,7 @@ import JE._
 import scala.xml._
 import net.magnetic.comet._
 
-class MagneticPoetryUI {
+class PoetryDisplay {
 
   def renderTile(ns: NodeSeq, tup: (String, Tile)): NodeSeq = {
     val (id, tile) = tup
