@@ -15,6 +15,9 @@ class Boot {
     // where to search snippet
     LiftRules.addToPackages("net.magnetic")
 
+    // XHTML causes all sorts of problems with google analytics and adsense
+    LiftRules.useXhtmlMimeType = false
+
     // Build SiteMap
     val entries = Menu(Loc("Home", List("index"), "Home")) :: Nil
     LiftRules.setSiteMap(SiteMap(entries:_*))
